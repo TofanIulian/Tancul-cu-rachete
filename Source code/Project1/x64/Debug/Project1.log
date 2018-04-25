@@ -1,0 +1,9 @@
+﻿  Source.cpp
+c:\users\iulian\desktop\project1\project1\source.cpp(108): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+c:\users\iulian\desktop\project1\project1\source.cpp(109): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+c:\users\iulian\desktop\project1\project1\source.cpp(155): warning C4244: 'argument': conversion from 'double' to 'GLint', possible loss of data
+c:\users\iulian\desktop\project1\project1\source.cpp(157): warning C4244: 'argument': conversion from 'double' to 'GLint', possible loss of data
+c:\users\iulian\desktop\project1\project1\source.cpp(164): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+c:\users\iulian\desktop\project1\project1\source.cpp(165): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+c:\users\iulian\desktop\project1\project1\source.cpp(407): warning C4326: return type of 'main' should be 'int' instead of 'void'
+  Project1.vcxproj -> C:\Users\Iulian\Desktop\Project1\x64\Debug\Project1.exe

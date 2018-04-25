@@ -1,0 +1,339 @@
+#include<windows.h>
+#include <GL/freeglut.h>
+#include <stdlib.h>
+#include <math.h>
+#include <iostream>
+
+using namespace std;
+
+#define SPACEBAR 32
+#define PI 3.14159265
+
+double fluct = 1;
+int xr = 0, yr = 0;
+int unghi = 0;
+int f = 0;
+
+double *rachetax = new double[1000];
+double *rachetay = new double[1000];
+double *unghiracketa = new double[1000];
+double *unghifly = new double[1000];
+int r = 0;
+
+double *bombax = new double[1000];
+double *bombay = new double[1000];
+double *unghibomba = new double[1000];
+int k = 0;
+
+double *obx = new double[100];
+double *oby = new double[100];
+int c = 0;
+
+double viteza = 0.5;
+
+
+void die(int x)
+{
+	for (int x1 = x; x1 < k; x1++)
+	{
+		bombax[x1] = bombax[x1 + 1];
+		bombay[x1] = bombay[x1 + 1];
+		unghibomba[x1] = unghibomba[x1 + 1];
+	}
+	k--;
+}
+
+void dier(int x)
+{
+	for (int x1 = x; x1 < r; x1++)
+	{
+		rachetax[x1] = rachetax[x1 + 1];
+		rachetay[x1] = rachetay[x1 + 1];
+		unghifly[x1] = unghifly[x1 + 1];
+		unghiracketa[x1] = unghiracketa[x1 + 1];
+	}
+	r--;
+}
+
+void destroy(int y)
+{
+	for (int y1 = y; y1 < c; y1++)
+	{
+		obx[y1] = obx[y1 + 1];
+		oby[y1] = oby[y1 + 1];
+	}
+	c--;
+}
+void check()
+{
+	for (int x = 1; x <= r; x++)
+	{
+		for (int y = 0; y < c; y++)
+		{
+			if (obx[y] - 15 <= rachetax[x] && obx[y] + 15 >= rachetax[x] && rachetay[x] >= oby[y] - 15 && rachetay[x] <= oby[y] + 15)
+			{
+				dier(x);
+				destroy(y);
+			}
+
+		}
+		if (rachetax[x] > 1800 || rachetax[x] < 0 || rachetay[x]>1000 || rachetay[x] < 0)
+			dier(x);
+	}
+
+	for (int x = 1; x <= k; x++)
+	{
+		for (int y = 0; y < c; y++)
+		{
+			if (obx[y] - 15 <= bombax[x] && obx[y] + 15 >= bombax[x] && bombay[x] >= oby[y] - 15 && bombay[x] <= oby[y] + 15)
+			{
+				die(x);
+				destroy(y);
+			}
+
+		}
+		if (bombax[x] > 1800 || bombax[x] < 0 || bombay[x]>1000 || bombay[x] < 0)
+			die(x);
+	}
+}
+
+
+void init(void)
+{
+	glClearColor(0.0, 0.0, 0.0, 0.0);
+	gluOrtho2D(0.0, 1800.0, 0.0, 1000.0);
+	glShadeModel(GL_FLAT);
+}
+
+void tank()
+{
+	glPushMatrix();
+	glTranslated(100 + xr, 200.0 + yr, 0.0);
+	glColor3f(0.0, 0.0, 1.0);
+	glRecti(-20, -12, 20, 12);
+
+	glPushMatrix();
+	glRotated(unghi, 0.0, 0.0, 1.0);
+	glColor3f(1.0, 0.0, 0.0);
+	glRecti(-5, 0, 5, 30);
+	glPopMatrix();
+	glPopMatrix();
+}
+
+void racheta()
+{
+
+	for (int l = 1; l <= r; l++) {
+		if (rachetax[l] < 1800 && rachetax[l] > 0 && rachetay[l] < 1000 && rachetay[l] > 0)
+		{
+			glPushMatrix();
+			glTranslated(rachetax[l], rachetay[l], 0.0);
+			glPushMatrix();
+			glRotated(unghifly[l], 0.0, 0.0, 1.0);
+			glColor3f(0.0, 1.0, 0.0);
+			glBegin(GL_POLYGON);
+
+			glVertex2i(0, 20);
+			glVertex2i(-5, 15);
+			glVertex2i(-5, 5);
+			glVertex2i(-10, 0);
+			glVertex2i(10, 0);
+			glVertex2i(5, 5);
+			glVertex2i(5, 15);
+
+			glEnd();
+			glColor3f(1.0, 0.0, 0.0);
+			glPushMatrix();
+			glScaled(1, fluct, 1);
+
+			glBegin(GL_POLYGON);
+
+			glVertex2i(-8, -0.2);
+			glVertex2i(0, -20);
+			glVertex2i(8, -0.2);
+
+			glEnd();
+			glPopMatrix();
+			glPopMatrix();
+			glPopMatrix();
+			check();
+		}
+	}
+	for (int l = 1; l <= r; l++)
+	{
+		rachetax[l] += cos((unghiracketa[l] + 90) * PI / 180.0);
+		rachetay[l] += sin((unghiracketa[l] + 90) * PI / 180.0);
+		check();
+	}
+	viteza += 0.4;
+	check();
+}
+
+void bomba()
+{
+
+	for (int l = 1; l <= k; l++) {
+		if (bombax[l] < 1700 && bombax[l] > 0 && bombay[l] < 1000 && bombay[l] > 0)
+		{
+			glPushMatrix();
+			glTranslated(bombax[l], bombay[l], 0.0);
+			glPushMatrix();
+			glRotated(viteza, 0.0, 0.0, 1.0);
+			glColor3f(0.0, 1.0, 0.0);
+			glRecti(-5, -5, 5, 5);
+			glPopMatrix();
+			glPopMatrix();
+			check();
+		}
+	}
+	for (int l = 1; l <= k; l++)
+	{
+		bombax[l] += cos((unghibomba[l] + 90) * PI / 180.0);
+		bombay[l] += sin((unghibomba[l] + 90) * PI / 180.0);
+		check();
+	}
+	viteza += 0.4;
+	check();
+}
+
+void perete()
+{
+	for (int l = 0; l < c; l++)
+	{
+		glPushMatrix();
+		glColor3f(0.0, 1.0, 0.0);
+		glTranslated(obx[l], oby[l], 0.0);
+		glPushMatrix();
+		glRotated(viteza, 0.0, 0.0, 1.0);
+		glRecti(-15, -15, 15, 15);
+		glPopMatrix();
+		glPopMatrix();
+	}
+}
+
+void scena(void)
+{
+	glClear(GL_COLOR_BUFFER_BIT);
+	glLoadIdentity();
+	tank();
+	racheta();
+	bomba();
+	perete();
+	check();
+	glutSwapBuffers();
+	glFlush();
+}
+
+void keyboard(int key, int x, int y)
+{
+
+	switch (key) {
+	case GLUT_KEY_UP:
+		yr = yr + 5;
+		break;
+	case GLUT_KEY_DOWN:
+		yr = yr - 5;
+		break;
+	case GLUT_KEY_LEFT:
+		xr = xr - 5;
+		break;
+	case GLUT_KEY_RIGHT:
+		xr = xr + 5;
+		break;
+	case GLUT_KEY_PAGE_UP:
+		unghi += 3;
+		break;
+	case GLUT_KEY_PAGE_DOWN:
+		unghi -= 3;
+		break;
+	case GLUT_KEY_END:
+		r++;
+		rachetax[r] = 100 + xr;
+		rachetay[r] = 200.0 + yr;
+		unghiracketa[r] = unghi;
+		unghifly[r] = unghi;
+		break;
+	case GLUT_KEY_HOME:
+		k++;
+		bombax[k] = 100 + xr;
+		bombay[k] = 200.0 + yr;
+		unghibomba[k] = unghi;
+		break;
+	case GLUT_KEY_F1:
+		for (int i = 1; i <= r; i++)
+		{
+			unghiracketa[i] += 3;
+			unghifly[i] += 3;
+		}
+		break;
+	case GLUT_KEY_F2:
+		for (int i = 1; i <= r; i++)
+		{
+			unghifly[i] -= 3;
+			unghiracketa[i] -= 3;
+		}
+		break;
+
+	}
+}
+
+void reshape(int w, int h)
+{
+	glViewport(0, 0, (GLsizei)w, (GLsizei)h);
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	glOrtho(0.0, 1800.0, 0.0, 1000.0, -1.0, 1.0);
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+}
+
+void miscas(void)
+{
+	if (fluct < 1.4 && f == 0)
+	{
+		fluct = fluct + 0.2;
+	}
+	if (fluct > 1 && f == 1)
+	{
+		fluct = fluct - 0.2;
+	}
+	if (fluct == 1.4)
+		f = 1;
+	else if (fluct == 1)
+		f = 0;
+
+	glutPostRedisplay();
+}
+
+void mouse(int button, int state, int x, int y)
+{
+	switch (button) {
+	case GLUT_LEFT_BUTTON:
+		if (state == GLUT_DOWN)
+		{
+
+			obx[c] = x;
+			oby[c] = 1000 - y;
+			c++;
+		}
+		glutIdleFunc(miscas);
+		break;
+	default:
+		break;
+	}
+}
+
+void main(int argc, char** argv)
+{
+	glutInit(&argc, argv);
+	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
+	glutInitWindowSize(1800, 1000);
+	glutInitWindowPosition(1, 1);
+	glutCreateWindow("Tancul cu rachete");
+	init();
+	glutDisplayFunc(scena);
+	glutReshapeFunc(reshape);
+	glutMouseFunc(mouse);
+	glutSpecialFunc(keyboard);
+	glutMainLoop();
+}

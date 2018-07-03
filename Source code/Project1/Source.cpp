@@ -23,7 +23,7 @@ public:
 		x = a;
 		y = b;
 	}
-	Unit(){}
+	Unit() {}
 	int getx()
 	{
 		return x;
@@ -52,7 +52,7 @@ public:
 	{
 		unghiTun = u;
 	}
-	Tank():Unit(){}
+	Tank() :Unit() {}
 	int getUnghiTun()
 	{
 		return unghiTun;
@@ -67,7 +67,6 @@ public:
 		glTranslated(getx(), gety(), 0.0);
 		glColor3f(0.0, 0.0, 1.0);
 		glRecti(-20, -12, 20, 12);
-
 		glPushMatrix();
 		glRotated(unghiTun, 0.0, 0.0, 1.0);
 		glColor3f(1.0, 0.0, 0.0);
@@ -115,7 +114,7 @@ class Racheta : public Unit
 private:
 	int unghiFlight;
 public:
-	Racheta(int a, int b, int u):Unit(a,b)
+	Racheta(int a, int b, int u) :Unit(a, b)
 	{
 		unghiFlight = u;
 	}
@@ -169,7 +168,7 @@ public:
 class Obiect : public Unit
 {
 public:
-	Obiect(int a, int b):Unit(a,b){}
+	Obiect(int a, int b) :Unit(a, b) {}
 	Obiect() :Unit() {}
 	void Draw()
 	{
@@ -196,7 +195,7 @@ int c = 0;
 
 void die(int x)
 {
-	for (int i = x; i < b-1; i++)
+	for (int i = x; i < b - 1; i++)
 	{
 		bomba[i] = bomba[i + 1];
 	}
@@ -205,7 +204,7 @@ void die(int x)
 
 void dier(int x)
 {
-	for (int i = x; i < r-1; i++)
+	for (int i = x; i < r - 1; i++)
 	{
 		racheta[i] = racheta[i + 1];
 	}
@@ -214,7 +213,7 @@ void dier(int x)
 
 void destroy(int y)
 {
-	for (int i = y; i < c-1; i++)
+	for (int i = y; i < c - 1; i++)
 	{
 		ob[i] = ob[i + 1];
 	}
@@ -268,7 +267,6 @@ void ta()
 
 void ro()
 {
-
 	for (int i = 0; i < r; i++)
 	{
 		racheta[i].Draw();
@@ -278,7 +276,7 @@ void ro()
 
 void bo()
 {
-	for (int i = 0; i < b; i++) 
+	for (int i = 0; i < b; i++)
 	{
 		bomba[i].Draw();
 	}
@@ -310,7 +308,6 @@ void scena(void)
 
 void keyboard(int key, int x, int y)
 {
-
 	switch (key) {
 	case GLUT_KEY_UP:
 		tank.sety(tank.gety() + 5);
@@ -343,16 +340,15 @@ void keyboard(int key, int x, int y)
 		bomba[b] = Bomb;
 		b++;
 	}
-		break;
+	break;
 	case GLUT_KEY_F1:
 		for (int i = 0; i < r; i++)
 			racheta[i].setUnghiFlight(racheta[i].getUnghiFlight() + 3);
 		break;
 	case GLUT_KEY_F2:
 		for (int i = 0; i < r; i++)
-			racheta[i].setUnghiFlight(racheta[i].getUnghiFlight()-3);
+			racheta[i].setUnghiFlight(racheta[i].getUnghiFlight() - 3);
 		break;
-
 	}
 }
 
@@ -380,7 +376,6 @@ void miscare(void)
 		f = 1;
 	else if (fluct == 1)
 		f = 0;
-
 	glutPostRedisplay();
 }
 
@@ -407,7 +402,7 @@ void main(int argc, char** argv)
 {
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
-	glutInitWindowSize(1800, 1000);
+	glutInitWindowSize(1600, 900);
 	glutInitWindowPosition(1, 1);
 	glutCreateWindow("Tancul cu rachete");
 	init();
